@@ -31,7 +31,7 @@ if [ -z $GITHUB_TOKEN ]; then
   echo ""
 fi
 
-if [ -z $GITHUB_TOKEN ]; then
+if [ -z $PRIVATE_REPO ]; then
   echo -n "Private Chef Repo (Take the github HTTP URL): "
   stty echo
   read PRIVATE_REPO
