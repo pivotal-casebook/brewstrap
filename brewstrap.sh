@@ -8,7 +8,7 @@ RVM_URL="http://rvm.beginrescueend.com/releases/rvm-install-head"
 TOTAL=9
 STEP=1
 function print_step() {
-  printf "($(( STEP++ ))/${TOTAL}) ${1}\n"
+  printf "e[32m($(( STEP++ ))/${TOTAL}) ${1}e[0m\n"
 }
 
 printf "\nStarting brewstrap...\n"
