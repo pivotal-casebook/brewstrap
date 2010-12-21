@@ -5,13 +5,15 @@ BREWSTRAP_BIN="${BREWSTRAP_BASE}/raw/master/bin/brewstrap.sh"
 HOMEBREW_URL="https://gist.github.com/raw/323731/install_homebrew.rb"
 RVM_URL="http://rvm.beginrescueend.com/releases/rvm-install-head"
 
+clear
+
 TOTAL=9
 STEP=1
 function print_step() {
-  printf "e[32m($(( STEP++ ))/${TOTAL}) ${1}e[0m\n"
+  echo -e "\033[1m($(( STEP++ ))/${TOTAL}) ${1}\033[0m\n"
 }
 
-printf "\nStarting brewstrap...\n"
+echo -e "\033[1m\nStarting brewstrap...\033[0m\n"
 
 [[ -s "$HOME/.brewstraprc" ]] && source "$HOME/.brewstraprc"
 
