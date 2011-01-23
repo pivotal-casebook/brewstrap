@@ -89,10 +89,10 @@ else
   print_step "RVM Ruby 1.9.2 already installed"
 fi
 
-rvm 1.9.2 exec gem specification --version '>=0.9.12' chef 2>&1 | awk 'BEGIN { s = 0 } /^name:/ { s = 1; exit }; END { if(s == 0) exit 1 }'
+rvm 1.9.2-head exec gem specification --version '>=0.9.12' chef 2>&1 | awk 'BEGIN { s = 0 } /^name:/ { s = 1; exit }; END { if(s == 0) exit 1 }'
 if [ $? -gt 0 ]; then
   print_step "Installing chef gem"
-  rvm 1.9.2 gem install chef
+  rvm 1.9.2-head gem install chef
 else
   print_step "Chef already installed"
 fi
