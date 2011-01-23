@@ -106,4 +106,4 @@ else
 fi
 
 print_step "Kicking off chef-solo"
-sudo -E env GITHUB_LOGIN=$GITHUB_LOGIN GITHUB_TOKEN=$GITHUB_TOKEN rvm 1.9.2 exec chef-solo -l debug -j /tmp/chef/node.json -c /tmp/chef/solo.rb
+sudo -E env GITHUB_LOGIN=$GITHUB_LOGIN GITHUB_TOKEN=$GITHUB_TOKEN rvm 1.9.2-head exec chef-solo -l debug -j /tmp/chef/node.json -c /tmp/chef/solo.rb
