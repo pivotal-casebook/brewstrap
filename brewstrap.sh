@@ -81,7 +81,7 @@ if [ ! -e ~/.bash_profile ]; then
     echo "[[ -s \"\$HOME/.rvm/scripts/rvm\" ]] && source \"\$HOME/.rvm/scripts/rvm\"" > ~/.bash_profile
 fi
 
-rvm list | grep ruby-1.9.2
+rvm list | grep ruby-1.9.2-head
 if [ $? -gt 0 ]; then
   print_step "Installing RVM Ruby 1.9.2"
   rvm install 1.9.2-head
