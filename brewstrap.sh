@@ -101,9 +101,9 @@ if [ ! -d /tmp/chef ]; then
   print_step "Cloning private chef repo"
   git clone ${PRIVATE_REPO} /tmp/chef
 else
-  print_step "Updating private chef repo"
+  print_step "Updating private chef repo (password will be your github account password)"
   cd /tmp/chef && git pull
 fi
 
-print_step "Kicking off chef-solo"
+print_step "Kicking off chef-solo (password will be your local user password)"
 sudo -E env GITHUB_LOGIN=$GITHUB_LOGIN GITHUB_TOKEN=$GITHUB_TOKEN rvm 1.9.2-head exec chef-solo -l debug -j /tmp/chef/node.json -c /tmp/chef/solo.rb
