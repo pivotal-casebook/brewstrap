@@ -65,8 +65,13 @@ else
   print_step "Xcode already installed"
 fi
 
-print_step "Brew installing git"
-brew install git
+GIT_PATH=`which git`
+if [ $? != 0 ]; then
+  print_step "Brew installing git"
+  brew install git
+else
+  print_step "Git already installed"
+fi
 
 if [ ! -e ~/.rvm/bin/rvm ]; then
   print_step "Installing RVM"
