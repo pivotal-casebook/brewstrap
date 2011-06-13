@@ -75,7 +75,7 @@ fi
 
 if [ ! -e ~/.rvm/bin/rvm ]; then
   print_step "Installing RVM"
-  bash < <( curl ${RVM_URL} )
+  bash < <( curl -fsSL ${RVM_URL} )
 else
   print_step "RVM already installed"
 fi
