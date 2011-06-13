@@ -3,7 +3,7 @@
 BREWSTRAP_BASE="https://github.com/schubert/brewstrap"
 BREWSTRAP_BIN="${BREWSTRAP_BASE}/raw/master/bin/brewstrap.sh"
 HOMEBREW_URL="https://gist.github.com/raw/323731/install_homebrew.rb"
-RVM_URL="http://rvm.beginrescueend.com/releases/rvm-install-head"
+RVM_URL="https://rvm.beginrescueend.com/install/rvm"
 
 clear
 
