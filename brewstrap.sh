@@ -108,7 +108,7 @@ if [ ! -d /tmp/chef ]; then
 else
   print_step "Updating private chef repo (password will be your github account password)"
   if [ -e /tmp/chef/.rvmrc ]; then
-    rvm rvmrc trust /tmp/chef/.rvmrc
+    rvm rvmrc trust /tmp/chef/
   fi
   cd /tmp/chef && git pull
 fi
