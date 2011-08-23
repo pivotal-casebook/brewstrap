@@ -26,6 +26,13 @@ if [ -z $GITHUB_LOGIN ]; then
   echo ""
 fi
 
+if [ -z $GITHUB_PASSWORD ]; then
+  echo -n "Github Password: "
+  stty -echo
+  read GITHUB_PASSWORD
+  echo ""
+fi
+
 if [ -z $GITHUB_TOKEN ]; then
   echo -n "Github Token: "
   stty echo
@@ -39,9 +46,11 @@ if [ -z $PRIVATE_REPO ]; then
   read PRIVATE_REPO
   echo ""
 fi
+stty echo
 
 rm -f $HOME/.brewstraprc
 echo "GITHUB_LOGIN=${GITHUB_LOGIN}" >> $HOME/.brewstraprc
+echo "GITHUB_PASSWORD=${GITHUB_PASSWORD}" >> $HOME/.brewstraprc
 echo "GITHUB_TOKEN=${GITHUB_TOKEN}" >> $HOME/.brewstraprc
 echo "PRIVATE_REPO=${PRIVATE_REPO}" >> $HOME/.brewstraprc
 
@@ -114,4 +123,4 @@ else
 fi
 
 print_step "Kicking off chef-solo (password will be your local user password)"
-sudo -E env GITHUB_LOGIN=$GITHUB_LOGIN GITHUB_TOKEN=$GITHUB_TOKEN rvm 1.9.2 exec chef-solo -l debug -j /tmp/chef/node.json -c /tmp/chef/solo.rb
+sudo -E env GITHUB_PASSWORD=$GITHUB_PASSWORD GITHUB_LOGIN=$GITHUB_LOGIN GITHUB_TOKEN=$GITHUB_TOKEN rvm 1.9.2 exec chef-solo -l debug -j /tmp/chef/node.json -c /tmp/chef/solo.rb
