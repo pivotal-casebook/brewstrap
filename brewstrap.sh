@@ -4,7 +4,7 @@ BREWSTRAP_BASE="https://github.com/schubert/brewstrap"
 BREWSTRAP_BIN="${BREWSTRAP_BASE}/raw/master/bin/brewstrap.sh"
 HOMEBREW_URL="https://gist.github.com/raw/323731/install_homebrew.rb"
 RVM_URL="https://rvm.beginrescueend.com/install/rvm"
-
+RVM_RUBY_VERSION="ruby-1.9.2-p0"
 clear
 
 TOTAL=9
@@ -97,16 +97,16 @@ fi
 
 rvm list | grep ruby-1.9.2
 if [ $? -gt 0 ]; then
-  print_step "Installing RVM Ruby 1.9.2"
-  rvm install 1.9.2
+  print_step "Installing RVM Ruby ${RVM_RUBY_VERSION}"
+  rvm install ${RVM_RUBY_VERSION}
 else
-  print_step "RVM Ruby 1.9.2 already installed"
+  print_step "RVM Ruby ${RVM_RUBY_VERSION} already installed"
 fi
 
-rvm 1.9.2 exec gem specification --version '>=0.9.12' chef 2>&1 | awk 'BEGIN { s = 0 } /^name:/ { s = 1; exit }; END { if(s == 0) exit 1 }'
+rvm ${RVM_RUBY_VERSION} exec gem specification --version '>=0.9.12' chef 2>&1 | awk 'BEGIN { s = 0 } /^name:/ { s = 1; exit }; END { if(s == 0) exit 1 }'
 if [ $? -gt 0 ]; then
   print_step "Installing chef gem"
-  rvm 1.9.2 exec gem install chef
+  rvm ${RVM_RUBY_VERSION} exec gem install chef
 else
   print_step "Chef already installed"
 fi
@@ -123,4 +123,4 @@ else
 fi
 
 print_step "Kicking off chef-solo (password will be your local user password)"
-sudo -E env GITHUB_PASSWORD=$GITHUB_PASSWORD GITHUB_LOGIN=$GITHUB_LOGIN GITHUB_TOKEN=$GITHUB_TOKEN rvm 1.9.2 exec chef-solo -l debug -j /tmp/chef/node.json -c /tmp/chef/solo.rb
+sudo -E env GITHUB_PASSWORD=$GITHUB_PASSWORD GITHUB_LOGIN=$GITHUB_LOGIN GITHUB_TOKEN=$GITHUB_TOKEN rvm ${RVM_RUBY_VERSION} exec chef-solo -l debug -j /tmp/chef/node.json -c /tmp/chef/solo.rb
