@@ -106,7 +106,7 @@ fi
 rvm ${RVM_RUBY_VERSION} exec gem specification --version '>=0.9.12' chef 2>&1 | awk 'BEGIN { s = 0 } /^name:/ { s = 1; exit }; END { if(s == 0) exit 1 }'
 if [ $? -gt 0 ]; then
   print_step "Installing chef gem"
-  rvm ${RVM_RUBY_VERSION} exec gem install chef
+  sh -c "rvm ${RVM_RUBY_VERSION} exec gem install chef"
 else
   print_step "Chef already installed"
 fi
