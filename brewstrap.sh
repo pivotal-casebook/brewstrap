@@ -28,7 +28,7 @@ function attempt_to_download_xcode() {
   open "${XCODE_URL}"
   SUCCESS="1"
   while [ $SUCCESS -eq "1" ]; do
-    ls -c1 ~/Downloads/xcode*.dmg | tail -n1 > /dev/null
+    ls -c1 ~/Downloads/xcode*.dmg | tail -n1 2>&1 > /dev/null
     if [ ! $? -eq 0 ]; then
       for file in $(ls -c1 ~/Downloads/xcode*.dmg); do
         echo "Found ${file}. Verifying..."
@@ -109,7 +109,7 @@ fi
 
 if [ ! -d /Developer/Applications/Xcode.app ]; then
   print_step "Installing Xcode"
-  ls -c1 ~/Downloads/xcode*.dmg | tail -n1 > /dev/null
+  ls -c1 ~/Downloads/xcode*.dmg | tail -n1 2>&1 > /dev/null
   if [ ! $? -eq 0 ]; then
     XCODE_DMG=`ls -c1 ~/Downloads/xcode*.dmg | tail -n1`
   else
