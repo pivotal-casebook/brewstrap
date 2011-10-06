@@ -5,6 +5,8 @@ BREWSTRAP_BIN="${BREWSTRAP_BASE}/raw/master/bin/brewstrap.sh"
 HOMEBREW_URL="https://gist.github.com/raw/323731/install_homebrew.rb"
 RVM_URL="https://rvm.beginrescueend.com/install/rvm"
 RVM_RUBY_VERSION="ruby-1.9.2-p290"
+XCODE_SHA="2a67c713ab1ef7a47356ba86445f6e630c674b17"
+XCODE_URL="http://developer.apple.com/downloads/download.action?path=Developer_Tools/xcode_4.1_for_lion/xcode_4.1_for_lion.dmg"
 clear
 
 TOTAL=9
@@ -14,6 +16,13 @@ function print_step() {
 }
 
 echo -e "\033[1m\nStarting brewstrap...\033[0m\n"
+echo -e "\n\n\n"
+echo -e "Brewstrap will make sure your machine is bootstrapped and ready to run chef"
+echo -e "by making sure XCode, Homebrew and RVM and chef are installed. From there it will"
+echo -e "kick off a chef-solo run using whatever chef repository of cookbooks you point it at."
+echo -e "\n"
+echo -e "It expects the chef repo to exist as a public or private repository on github.com"
+echo -e "\n"
 
 [[ -s "$HOME/.brewstraprc" ]] && source "$HOME/.brewstraprc"
 
