@@ -29,14 +29,16 @@ function attempt_to_download_xcode() {
   open "${XCODE_URL}"
   SUCCESS="1"
   while [ $SUCCESS -eq "1" ]; do
-    if [ ! -e ~/Downloads/${XCODE_DMG_NAME} ]; then
-      for file in $(ls -c1 ~/Downloads/xcode*.dmg); do
+    if [ -e ~/Downloads/${XCODE_DMG_NAME} ]; then
+      for file in $(ls -c1 ~/Downloads/${XCODE_DMG_NAME}); do
         echo "Found ${file}. Verifying..."
         hdiutil verify $file
         SUCCESS=$?
         if [ $SUCCESS -eq "0" ]; then
           XCODE_DMG=$file
           break;
+        else
+          echo "${file} failed SHA verification. Incomplete download or corrupted file? Try again?"
         fi
       done
     fi
