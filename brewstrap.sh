@@ -16,7 +16,7 @@ function print_step() {
 }
 
 echo -e "\033[1m\nStarting brewstrap...\033[0m\n"
-echo -e "\n\n\n"
+echo -e "\n"
 echo -e "Brewstrap will make sure your machine is bootstrapped and ready to run chef"
 echo -e "by making sure XCode, Homebrew and RVM and chef are installed. From there it will"
 echo -e "kick off a chef-solo run using whatever chef repository of cookbooks you point it at."
