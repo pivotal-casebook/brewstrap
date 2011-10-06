@@ -5,6 +5,7 @@ BREWSTRAP_BIN="${BREWSTRAP_BASE}/raw/master/bin/brewstrap.sh"
 HOMEBREW_URL="https://gist.github.com/raw/323731/install_homebrew.rb"
 RVM_URL="https://rvm.beginrescueend.com/install/rvm"
 RVM_RUBY_VERSION="ruby-1.9.2-p290"
+XCODE_DMG_NAME="xcode_4.1_for_lion.dmg"
 XCODE_SHA="2a67c713ab1ef7a47356ba86445f6e630c674b17"
 XCODE_URL="http://developer.apple.com/downloads/download.action?path=Developer_Tools/xcode_4.1_for_lion/xcode_4.1_for_lion.dmg"
 clear
@@ -28,8 +29,7 @@ function attempt_to_download_xcode() {
   open "${XCODE_URL}"
   SUCCESS="1"
   while [ $SUCCESS -eq "1" ]; do
-    ls -c1 ~/Downloads/xcode*.dmg | tail -n1 2>&1 > /dev/null
-    if [ ! $? -eq 0 ]; then
+    if [ ! -e ~/Downloads/${XCODE_DMG_NAME} ]; then
       for file in $(ls -c1 ~/Downloads/xcode*.dmg); do
         echo "Found ${file}. Verifying..."
         hdiutil verify $file
@@ -109,11 +109,10 @@ fi
 
 if [ ! -d /Developer/Applications/Xcode.app ]; then
   print_step "Installing Xcode"
-  ls -c1 ~/Downloads/xcode*.dmg | tail -n1 2>&1 > /dev/null
-  if [ ! $? -eq 0 ]; then
-    XCODE_DMG=`ls -c1 ~/Downloads/xcode*.dmg | tail -n1`
-  else
+  if [ ! -e ~/Downloads/${XCODE_DMG_NAME} ]; then
     attempt_to_download_xcode
+  else
+    XCODE_DMG=`ls -c1 ~/Downloads/xcode*.dmg | tail -n1`
   fi
   if [ ! -e $XCODE_DMG ]; then
     print_error "Unable to download XCode and it is not installed!"
