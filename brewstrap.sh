@@ -83,6 +83,7 @@ if [ ! -d /Developer/Applications/Xcode.app ]; then
   XCODE_DMG=`ls -c1 ~/Downloads/xcode*.dmg | tail -n1`
   if [ ! -e $XCODE_DMG ]; then
     print_error "Unable to install XCode and it is not installed!"
+    exit 1
   fi
   cd `dirname $0`
   mkdir -p /Volumes/Xcode
