@@ -14,9 +14,26 @@ STEP=1
 function print_step() {
   echo -e "\033[1m($(( STEP++ ))/${TOTAL}) ${1}\033[0m\n"
 }
+
 function print_error() {
   echo -e "\033[1;31m${1}\033[0m\n"
   exit 1
+}
+
+function attempt_to_download_xcode() {
+  TOTAL=12
+  print_step "XCode not already downloaded, attempting to download..."
+  print_step "Collecting information to download XCode..."
+  echo -n "ADC Username: "
+  stty echo
+  read ADC_LOGIN
+  echo ""
+  echo -n "ADC Password: "
+  stty -echo
+  read ADC_PASSWORD
+  echo ""
+
+  # shasum ~/Downloads/xcode_4.1_for_lion.dmg | cut -f 1 -d ' '
 }
 
 
@@ -81,9 +98,9 @@ fi
 if [ ! -d /Developer/Applications/Xcode.app ]; then
   print_step "Installing Xcode"
   XCODE_DMG=`ls -c1 ~/Downloads/xcode*.dmg | tail -n1`
+  attempt_to_download_xcode
   if [ ! -e $XCODE_DMG ]; then
     print_error "Unable to install XCode and it is not installed!"
-    exit 1
   fi
   cd `dirname $0`
   mkdir -p /Volumes/Xcode
