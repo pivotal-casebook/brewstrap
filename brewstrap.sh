@@ -22,20 +22,32 @@ function print_error() {
 
 function attempt_to_download_xcode() {
   TOTAL=12
-  print_step "XCode not already downloaded, attempting to download..."
-  print_step "Collecting information to download XCode..."
-  echo -n "ADC Username: "
-  stty echo
-  read ADC_LOGIN
-  echo ""
-  echo -n "ADC Password: "
-  stty -echo
-  read ADC_PASSWORD
-  echo ""
-
-  # shasum ~/Downloads/xcode_4.1_for_lion.dmg | cut -f 1 -d ' '
+  echo -e "XCode is not installed or downloaded. Safari will now open to ADC to download XCode."
+  echo -e "Upon logging into your ADC account, download the latest XCode DMG file."
+  echo -e "Brewstrap will continue when the download is complete. Press Ctrl-C to abort"
+  open "${XCODE_URL}"
+  SUCCESS="1"
+  while [ $SUCCESS -eq "1" ]; do
+    ls -c1 ~/Downloads/xcode*.dmg | tail -n1 > /dev/null
+    if [ ! $? -eq 0 ]; then
+      for file in $(ls -c1 ~/Downloads/xcode*.dmg); do
+        echo "Found ${file}. Verifying..."
+        hdiutil verify $file
+        SUCCESS=$?
+        if [ $SUCCESS -eq "0" ]; then
+          XCODE_DMG=$file
+          break;
+        fi
+      done
+    fi
+    if [ $SUCCESS -eq "0" ]; then
+      break;
+    else
+      echo "Waiting for XCode download to finish..."
+      sleep 30
+    fi
+  done
 }
-
 
 echo -e "\033[1m\nStarting brewstrap...\033[0m\n"
 echo -e "\n"
@@ -97,10 +109,14 @@ fi
 
 if [ ! -d /Developer/Applications/Xcode.app ]; then
   print_step "Installing Xcode"
-  XCODE_DMG=`ls -c1 ~/Downloads/xcode*.dmg | tail -n1`
-  attempt_to_download_xcode
+  ls -c1 ~/Downloads/xcode*.dmg | tail -n1 > /dev/null
+  if [ ! $? -eq 0 ]; then
+    XCODE_DMG=`ls -c1 ~/Downloads/xcode*.dmg | tail -n1`
+  else
+    attempt_to_download_xcode
+  fi
   if [ ! -e $XCODE_DMG ]; then
-    print_error "Unable to install XCode and it is not installed!"
+    print_error "Unable to download XCode and it is not installed!"
   fi
   cd `dirname $0`
   mkdir -p /Volumes/Xcode
