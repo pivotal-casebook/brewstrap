@@ -9,11 +9,16 @@ XCODE_SHA="2a67c713ab1ef7a47356ba86445f6e630c674b17"
 XCODE_URL="http://developer.apple.com/downloads/download.action?path=Developer_Tools/xcode_4.1_for_lion/xcode_4.1_for_lion.dmg"
 clear
 
-TOTAL=9
+TOTAL=10
 STEP=1
 function print_step() {
   echo -e "\033[1m($(( STEP++ ))/${TOTAL}) ${1}\033[0m\n"
 }
+function print_error() {
+  echo -e "\033[1;31m${1}\033[0m\n"
+  exit 1
+}
+
 
 echo -e "\033[1m\nStarting brewstrap...\033[0m\n"
 echo -e "\n"
@@ -66,6 +71,9 @@ echo "PRIVATE_REPO=${PRIVATE_REPO}" >> $HOME/.brewstraprc
 if [ ! -e /usr/local/bin/brew ]; then
   print_step "Installing homebrew"
   ruby -e "$(curl -fsSL ${HOMEBREW_URL})"
+  if [ ! $? -eq 0 ]; then
+    print_error "Unable to install homebrew!"
+  fi
 else
   print_step "Homebrew already installed"
 fi
@@ -73,6 +81,9 @@ fi
 if [ ! -d /Developer/Applications/Xcode.app ]; then
   print_step "Installing Xcode"
   XCODE_DMG=`ls -c1 ~/Downloads/xcode*.dmg | tail -n1`
+  if [ ! -e $XCODE_DMG ]; then
+    print_error "Unable to install XCode and it is not installed!"
+  fi
   cd `dirname $0`
   mkdir -p /Volumes/Xcode
   hdiutil attach -mountpoint /Volumes/Xcode $XCODE_DMG
@@ -87,6 +98,9 @@ GIT_PATH=`which git`
 if [ $? != 0 ]; then
   print_step "Brew installing git"
   brew install git
+  if [ ! $? -eq 0 ]; then
+    print_error "Unable to install git!"
+  fi
 else
   print_step "Git already installed"
 fi
@@ -94,6 +108,9 @@ fi
 if [ ! -e ~/.rvm/bin/rvm ]; then
   print_step "Installing RVM"
   bash < <( curl -fsSL ${RVM_URL} )
+  if [ ! $? -eq 0 ]; then
+    print_error "Unable to install RVM!"
+  fi
 else
   print_step "RVM already installed"
 fi
@@ -108,6 +125,9 @@ rvm list | grep ruby-1.9.2
 if [ $? -gt 0 ]; then
   print_step "Installing RVM Ruby ${RVM_RUBY_VERSION}"
   rvm install ${RVM_RUBY_VERSION}
+  if [ ! $? -eq 0 ]; then
+    print_error "Unable to install RVM ${RVM_RUBY_VERSION}"
+  fi
 else
   print_step "RVM Ruby ${RVM_RUBY_VERSION} already installed"
 fi
@@ -116,20 +136,35 @@ rvm ${RVM_RUBY_VERSION} exec gem specification --version '>=0.9.12' chef 2>&1 | 
 if [ $? -gt 0 ]; then
   print_step "Installing chef gem"
   sh -c "rvm ${RVM_RUBY_VERSION} exec gem install chef"
+  if [ ! $? -eq 0 ]; then
+    print_error "Unable to install chef!"
+  fi
 else
   print_step "Chef already installed"
 fi
 
 if [ ! -d /tmp/chef ]; then
-  print_step "Cloning private chef repo"
+  print_step "Cloning chef repo"
   git clone ${PRIVATE_REPO} /tmp/chef
+  if [ ! $? -eq 0 ]; then
+    print_error "Unable to clone repo!"
+  fi
 else
   print_step "Updating private chef repo (password will be your github account password)"
   if [ -e /tmp/chef/.rvmrc ]; then
     rvm rvmrc trust /tmp/chef/
   fi
   cd /tmp/chef && git pull
+  if [ ! $? -eq 0 ]; then
+    print_error "Unable to update repo!"
+  fi
 fi
 
 print_step "Kicking off chef-solo (password will be your local user password)"
 sudo -E env GITHUB_PASSWORD=$GITHUB_PASSWORD GITHUB_LOGIN=$GITHUB_LOGIN GITHUB_TOKEN=$GITHUB_TOKEN rvm ${RVM_RUBY_VERSION} exec chef-solo -l debug -j /tmp/chef/node.json -c /tmp/chef/solo.rb
+if [ ! $? -eq 0 ]; then
+  print_error "BREWSTRAP FAILED!"
+else
+  print_step "BREWSTRAP FINISHED"
+fi
+
