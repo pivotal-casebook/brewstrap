@@ -130,7 +130,8 @@ if [ ! -d /Developer/Applications/Xcode.app ]; then
     MPKG_PATH=`find /Volumes/Xcode | grep .mpkg | head -n1`
     sudo installer -verbose -pkg "${MPKG_PATH}" -target /
     hdiutil detach -Force /Volumes/Xcode
-  else
+  fi
+else
     print_step "Xcode already installed"
 fi
 
