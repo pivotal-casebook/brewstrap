@@ -87,10 +87,10 @@ if [ -z $GITHUB_TOKEN ]; then
   echo ""
 fi
 
-if [ -z $PRIVATE_REPO ]; then
-  echo -n "Private Chef Repo (Take the github HTTP URL): "
+if [ -z $CHEF_REPO ]; then
+  echo -n "Chef Repo (Take the github HTTP URL): "
   stty echo
-  read PRIVATE_REPO
+  read CHEF_REPO
   echo ""
 fi
 stty echo
@@ -99,7 +99,7 @@ rm -f $HOME/.brewstraprc
 echo "GITHUB_LOGIN=${GITHUB_LOGIN}" >> $HOME/.brewstraprc
 echo "GITHUB_PASSWORD=${GITHUB_PASSWORD}" >> $HOME/.brewstraprc
 echo "GITHUB_TOKEN=${GITHUB_TOKEN}" >> $HOME/.brewstraprc
-echo "PRIVATE_REPO=${PRIVATE_REPO}" >> $HOME/.brewstraprc
+echo "CHEF_REPO=${CHEF_REPO}" >> $HOME/.brewstraprc
 
 if [ ! -e /usr/local/bin/brew ]; then
   print_step "Installing homebrew"
@@ -188,7 +188,9 @@ fi
 
 if [ ! -d /tmp/chef ]; then
   print_step "Cloning chef repo"
-  git clone ${PRIVATE_REPO} /tmp/chef && cd /tmp/chef && git submodule update --init
+  CHEF_REPO=`echo ${CHEF_REPO} | sed -e 's|https://|https://${GITHUB_LOGIN}:${GITHUB_PASSWORD}@|'`
+
+  git clone ${CHEF_REPO} /tmp/chef && cd /tmp/chef && git submodule update --init
   if [ ! $? -eq 0 ]; then
     print_error "Unable to clone repo!"
   fi
