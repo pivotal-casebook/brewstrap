@@ -110,23 +110,28 @@ else
 fi
 
 if [ ! -d /Developer/Applications/Xcode.app ]; then
-  print_step "Installing Xcode"
-  if [ ! -e ~/Downloads/${XCODE_DMG_NAME} ]; then
-    attempt_to_download_xcode
+  if [ -e /Applications/Install\ Xcode.app ]; then
+    print_step "Installing Xcode from the App Store..."
+    MPKG_PATH=`find /Applications/Install\ Xcode.app | grep Xcode.mpkg | head -n1`
+    sudo installer -verbose -pkg "${MPKG_PATH}" -target /
   else
-    XCODE_DMG=`ls -c1 ~/Downloads/xcode*.dmg | tail -n1`
-  fi
-  if [ ! -e $XCODE_DMG ]; then
-    print_error "Unable to download XCode and it is not installed!"
-  fi
-  cd `dirname $0`
-  mkdir -p /Volumes/Xcode
-  hdiutil attach -mountpoint /Volumes/Xcode $XCODE_DMG
-  MPKG_PATH=`find /Volumes/Xcode | grep .mpkg | head -n1`
-  sudo installer -verbose -pkg "${MPKG_PATH}" -target /
-  hdiutil detach -Force /Volumes/Xcode
-else
-  print_step "Xcode already installed"
+    print_step "Installing Xcode from DMG..."
+    if [ ! -e ~/Downloads/${XCODE_DMG_NAME} ]; then
+      attempt_to_download_xcode
+    else
+      XCODE_DMG=`ls -c1 ~/Downloads/xcode*.dmg | tail -n1`
+    fi
+    if [ ! -e $XCODE_DMG ]; then
+      print_error "Unable to download XCode and it is not installed!"
+    fi
+    cd `dirname $0`
+    mkdir -p /Volumes/Xcode
+    hdiutil attach -mountpoint /Volumes/Xcode $XCODE_DMG
+    MPKG_PATH=`find /Volumes/Xcode | grep .mpkg | head -n1`
+    sudo installer -verbose -pkg "${MPKG_PATH}" -target /
+    hdiutil detach -Force /Volumes/Xcode
+  else
+    print_step "Xcode already installed"
 fi
 
 GIT_PATH=`which git`
