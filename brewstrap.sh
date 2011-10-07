@@ -25,7 +25,10 @@ function attempt_to_download_xcode() {
   TOTAL=12
   echo -e "XCode is not installed or downloaded. Safari will now open to ADC to download XCode."
   echo -e "Upon logging into your ADC account, download the latest XCode DMG file."
-  echo -e "Brewstrap will continue when the download is complete. Press Ctrl-C to abort"
+  echo -e "Brewstrap will continue when the download is complete. Press Ctrl-C to abort."
+  echo -e ""
+  echo -e "Alternatively you can abort this and go download it from the App Store. Once doing that,"
+  echo -e "re-run this to have it install Xcode for you and continue the process."
   open "${XCODE_URL}"
   SUCCESS="1"
   while [ $SUCCESS -eq "1" ]; do
@@ -58,10 +61,9 @@ echo -e "by making sure XCode, Homebrew and RVM and chef are installed. From the
 echo -e "kick off a chef-solo run using whatever chef repository of cookbooks you point it at."
 echo -e "\n"
 echo -e "It expects the chef repo to exist as a public or private repository on github.com"
-echo -e "\n"
+echo -e "You will need your github credentials so now might be a good time to login to your account."
 
 [[ -s "$HOME/.brewstraprc" ]] && source "$HOME/.brewstraprc"
-
 
 print_step "Collecting information.."
 if [ -z $GITHUB_LOGIN ]; then
