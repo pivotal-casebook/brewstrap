@@ -187,8 +187,8 @@ else
 fi
 
 if [ ! -d /tmp/chef ]; then
-  print_step "Cloning chef repo"
   CHEF_REPO=`echo ${CHEF_REPO} | sed -e 's|https://${GITHUB_LOGIN}@|https://${GITHUB_LOGIN}:${GITHUB_PASSWORD}@|'`
+  print_step "Cloning chef repo (${CHEF_REPO})"
 
   git clone ${CHEF_REPO} /tmp/chef && cd /tmp/chef && git submodule update --init
   if [ ! $? -eq 0 ]; then
