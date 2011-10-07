@@ -188,7 +188,7 @@ fi
 
 if [ ! -d /tmp/chef ]; then
   print_step "Cloning chef repo"
-  git clone ${PRIVATE_REPO} /tmp/chef && cd /tmp/chef && git submodules update --init
+  git clone ${PRIVATE_REPO} /tmp/chef && cd /tmp/chef && git submodule update --init
   if [ ! $? -eq 0 ]; then
     print_error "Unable to clone repo!"
   fi
@@ -197,7 +197,7 @@ else
   if [ -e /tmp/chef/.rvmrc ]; then
     rvm rvmrc trust /tmp/chef/
   fi
-  cd /tmp/chef && git pull && git submodules update --init
+  cd /tmp/chef && git pull && git submodule update --init
   if [ ! $? -eq 0 ]; then
     print_error "Unable to update repo! Bad password?"
   fi
