@@ -16,6 +16,10 @@ function print_step() {
   echo -e "\033[1m($(( STEP++ ))/${TOTAL}) ${1}\033[0m\n"
 }
 
+function print_warning() {
+  echo -e "\033[1;33m${1}\033[0m\n"
+}
+
 function print_error() {
   echo -e "\033[1;31m${1}\033[0m\n"
   exit 1
@@ -208,6 +212,12 @@ fi
 
 if [ ! -e /tmp/chef/node.json ]; then
   print_error "The chef repo provided has no node.json at the toplevel. This is required to know what to run."
+fi
+
+if [ ! -e /tmp/chef/solo.rb ]; then
+  print_warning "No solo.rb found, writing one..."
+  echo "file_cache_path '/tmp/chef-solo-brewstrap'" > /tmp/chef/solo.rb
+  echo "cookbook_path '/tmp/chef/cookbooks'" > /tmp/chef/solo.rb
 fi
 
 print_step "Kicking off chef-solo (password will be your local user password)"
