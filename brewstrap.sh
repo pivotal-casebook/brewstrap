@@ -188,19 +188,23 @@ fi
 
 if [ ! -d /tmp/chef ]; then
   print_step "Cloning chef repo"
-  git clone ${PRIVATE_REPO} /tmp/chef
+  git clone ${PRIVATE_REPO} /tmp/chef && cd /tmp/chef && git submodules update --init
   if [ ! $? -eq 0 ]; then
     print_error "Unable to clone repo!"
   fi
 else
-  print_step "Updating private chef repo (password will be your github account password)"
+  print_step "Updating chef repo (password, if prompted, will be your github account password)"
   if [ -e /tmp/chef/.rvmrc ]; then
     rvm rvmrc trust /tmp/chef/
   fi
-  cd /tmp/chef && git pull
+  cd /tmp/chef && git pull && git submodules update --init
   if [ ! $? -eq 0 ]; then
-    print_error "Unable to update repo!"
+    print_error "Unable to update repo! Bad password?"
   fi
+fi
+
+if [ ! -e /tmp/chef/node.json ]; then
+  print_error "The chef repo provided has no node.json at the toplevel. This is required to know what to run."
 fi
 
 print_step "Kicking off chef-solo (password will be your local user password)"
