@@ -4,6 +4,7 @@ BREWSTRAP_BASE="https://github.com/schubert/brewstrap"
 BREWSTRAP_BIN="${BREWSTRAP_BASE}/raw/master/bin/brewstrap.sh"
 HOMEBREW_URL="https://gist.github.com/raw/323731/install_homebrew.rb"
 RVM_URL="https://rvm.beginrescueend.com/install/rvm"
+RVM_MIN_VERSION="185"
 RVM_RUBY_VERSION="ruby-1.9.2-p290"
 XCODE_DMG_NAME="xcode_4.1_for_lion.dmg"
 XCODE_SHA="2a67c713ab1ef7a47356ba86445f6e630c674b17"
@@ -159,7 +160,13 @@ if [ ! -e ~/.rvm/bin/rvm ]; then
     print_error "Unable to install RVM!"
   fi
 else
-  print_step "RVM already installed"
+  RVM_VERSION=`rvm --version | cut -f 2 -d ' ' | head -n2 | tail -n1 | sed -e 's/\.//g'`
+  if [ $RVM_VERSION -lt $RVM_MIN_VERSION ]; then
+    print_step "RVM needs to be upgraded..."
+    rvm get 1.8.5
+  else
+    print_step "RVM already installed"
+  fi
 fi
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
@@ -168,7 +175,7 @@ if [ ! -e ~/.bash_profile ]; then
     echo "[[ -s \"\$HOME/.rvm/scripts/rvm\" ]] && source \"\$HOME/.rvm/scripts/rvm\"" > ~/.bash_profile
 fi
 
-rvm list | grep ruby-1.9.2
+rvm list | grep ${RVM_RUBY_VERSION}
 if [ $? -gt 0 ]; then
   print_step "Installing RVM Ruby ${RVM_RUBY_VERSION}"
   rvm install ${RVM_RUBY_VERSION}
