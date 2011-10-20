@@ -160,10 +160,10 @@ if [ ! -e ~/.rvm/bin/rvm ]; then
     print_error "Unable to install RVM!"
   fi
 else
-  RVM_VERSION=`rvm --version | cut -f 2 -d ' ' | head -n2 | tail -n1 | sed -e 's/\.//g'`
+  RVM_VERSION=`~/.rvm/bin/rvm --version | cut -f 2 -d ' ' | head -n2 | tail -n1 | sed -e 's/\.//g'`
   if [ $RVM_VERSION -lt $RVM_MIN_VERSION ]; then
     print_step "RVM needs to be upgraded..."
-    rvm get 1.8.5
+    ~/.rvm/bin/rvm get 1.8.5
   else
     print_step "RVM already installed"
   fi
