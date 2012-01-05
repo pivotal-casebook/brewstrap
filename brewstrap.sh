@@ -2,6 +2,7 @@
 
 BREWSTRAP_BASE="https://github.com/schubert/brewstrap"
 BREWSTRAP_BIN="${BREWSTRAP_BASE}/raw/master/bin/brewstrap.sh"
+BREWSTRAPRC="${HOME}/.brewstraprc"
 HOMEBREW_URL="https://gist.github.com/raw/323731/install_homebrew.rb"
 RVM_URL="https://rvm.beginrescueend.com/install/rvm"
 RVM_MIN_VERSION="185"
@@ -68,7 +69,7 @@ echo -e "\n"
 echo -e "It expects the chef repo to exist as a public or private repository on github.com"
 echo -e "You will need your github credentials so now might be a good time to login to your account."
 
-[[ -s "$HOME/.brewstraprc" ]] && source "$HOME/.brewstraprc"
+[[ -s "$BREWSTRAPRC" ]] && source "$BREWSTRAPRC"
 
 print_step "Collecting information.."
 if [ -z $GITHUB_LOGIN ]; then
@@ -100,11 +101,12 @@ if [ -z $CHEF_REPO ]; then
 fi
 stty echo
 
-rm -f $HOME/.brewstraprc
-echo "GITHUB_LOGIN=${GITHUB_LOGIN}" >> $HOME/.brewstraprc
-echo "GITHUB_PASSWORD=${GITHUB_PASSWORD}" >> $HOME/.brewstraprc
-echo "GITHUB_TOKEN=${GITHUB_TOKEN}" >> $HOME/.brewstraprc
-echo "CHEF_REPO=${CHEF_REPO}" >> $HOME/.brewstraprc
+rm -f $BREWSTRAPRC
+echo "GITHUB_LOGIN=${GITHUB_LOGIN}" >> $BREWSTRAPRC
+echo "GITHUB_PASSWORD=${GITHUB_PASSWORD}" >> $BREWSTRAPRC
+echo "GITHUB_TOKEN=${GITHUB_TOKEN}" >> $BREWSTRAPRC
+echo "CHEF_REPO=${CHEF_REPO}" >> $BREWSTRAPRC
+chmod 0600 $BREWSTRAPRC
 
 if [ ! -e /usr/local/bin/brew ]; then
   print_step "Installing homebrew"
