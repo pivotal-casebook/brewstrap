@@ -202,9 +202,17 @@ if [ ! -d /tmp/chef ]; then
   CENSORED_REPO=`echo ${CHEF_REPO} | sed -e "s|${GITHUB_PASSWORD}|\*\*\*|"`
   print_step "Cloning chef repo (${CENSORED_REPO})"
 
-  git clone ${CHEF_REPO} /tmp/chef && cd /tmp/chef && git submodule update --init
+  git clone ${CHEF_REPO} /tmp/chef
   if [ ! $? -eq 0 ]; then
     print_error "Unable to clone repo!"
+  fi
+  print_step "Updating submodules..."
+  if [ -e /tmp/chef/.gitmodules ]; then
+    sed -i -e "s/${GITHUB_LOGIN}@/${GITHUB_LOGIN}:${GITHUB_PASSWORD}@/g" /tmp/chef/.gitmodules
+  fi
+  cd /tmp/chef && git submodule update --init
+  if [ ! $? -eq 0 ]; then
+    print_error "Unable to update submodules!"
   fi
 else
   print_step "Updating chef repo (password, if prompted, will be your github account password)"
