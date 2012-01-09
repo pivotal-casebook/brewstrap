@@ -244,4 +244,4 @@ if [ ! $? -eq 0 ]; then
 else
   print_step "BREWSTRAP FINISHED"
 fi
-
+exec bash --login
