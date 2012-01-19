@@ -193,6 +193,11 @@ if [ ! -e /usr/bin/gcc-4.2 ]; then
   sudo ln -fs /usr/bin/gcc /usr/bin/gcc-4.2
 fi
 
+if [ ! -e /usr/bin/g++-4.2 ]; then
+  print_step "must create a link for g++ to g++-4.2 using sudo"
+  sudo ln -fs /usr/bin/g++ /usr/bin/g++-4.2
+fi
+
 rvm ${RVM_RUBY_VERSION} exec gem specification --version '>=0.9.12' chef 2>&1 | awk 'BEGIN { s = 0 } /^name:/ { s = 1; exit }; END { if(s == 0) exit 1 }'
 if [ $? -gt 0 ]; then
   print_step "Installing chef gem"
