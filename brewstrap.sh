@@ -11,6 +11,7 @@ CHEF_MIN_VERSION="0.10.8"
 XCODE_DMG_NAME="xcode_4.1_for_lion.dmg"
 XCODE_SHA="2a67c713ab1ef7a47356ba86445f6e630c674b17"
 XCODE_URL="http://developer.apple.com/downloads/download.action?path=Developer_Tools/xcode_4.1_for_lion/xcode_4.1_for_lion.dmg"
+ORIGINAL_PWD=`pwd`
 clear
 
 TOTAL=10
@@ -255,4 +256,5 @@ if [ ! $? -eq 0 ]; then
 else
   print_step "BREWSTRAP FINISHED"
 fi
+cd $ORIGINAL_PWD
 exec bash --login
