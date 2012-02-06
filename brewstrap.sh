@@ -250,7 +250,7 @@ if [ ! -e /tmp/chef/solo.rb ]; then
 fi
 
 print_step "Kicking off chef-solo (password will be your local user password)"
-sudo -E env GITHUB_PASSWORD=$GITHUB_PASSWORD GITHUB_LOGIN=$GITHUB_LOGIN GITHUB_TOKEN=$GITHUB_TOKEN rvm ${RVM_RUBY_VERSION} exec chef-solo -l debug -j /tmp/chef/node.json -c /tmp/chef/solo.rb
+sudo -E env GITHUB_PASSWORD=$GITHUB_PASSWORD GITHUB_LOGIN=$GITHUB_LOGIN GITHUB_TOKEN=$GITHUB_TOKEN rvm ${RVM_RUBY_VERSION} exec chef-solo -j /tmp/chef/node.json -c /tmp/chef/solo.rb
 if [ ! $? -eq 0 ]; then
   print_error "BREWSTRAP FAILED!"
 else
