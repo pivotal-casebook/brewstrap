@@ -4,7 +4,7 @@ BREWSTRAP_BASE="https://github.com/schubert/brewstrap"
 BREWSTRAP_BIN="${BREWSTRAP_BASE}/raw/master/bin/brewstrap.sh"
 BREWSTRAPRC="${HOME}/.brewstraprc"
 HOMEBREW_URL="https://gist.github.com/raw/323731/install_homebrew.rb"
-RVM_URL="https://rvm.beginrescueend.com/install/rvm"
+RVM_URL="https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer"
 RVM_MIN_VERSION="185"
 RVM_RUBY_VERSION="ruby-1.9.3-p0"
 CHEF_MIN_VERSION="0.10.8"
@@ -159,7 +159,7 @@ fi
 
 if [ ! -e ~/.rvm/bin/rvm ]; then
   print_step "Installing RVM"
-  bash < <( curl -fsSL ${RVM_URL} )
+  bash -s stable < <( curl -fsSL ${RVM_URL} )
   if [ ! $? -eq 0 ]; then
     print_error "Unable to install RVM!"
   fi
