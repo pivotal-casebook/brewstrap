@@ -3,7 +3,7 @@ Brewstrap
 
 OSX Homebrew + RVM + Chef Solo
 
-    curl http://git.io/PvkgGw > /tmp/brewstrap.sh && bash /tmp/brewstrap.sh
+    curl -L http://git.io/PvkgGw > /tmp/brewstrap.sh && bash /tmp/brewstrap.sh
 
 * Homebrew: https://github.com/mxcl/homebrew
 * RVM: http://rvm.beginrescueend.com/
