@@ -212,8 +212,13 @@ else
 fi
 
 if [ ! -d /tmp/chef ]; then
-  CHEF_REPO=`echo ${CHEF_REPO} | sed -e "s|https://${GITHUB_LOGIN}@|https://${GITHUB_LOGIN}:${GITHUB_PASSWORD}@|"`
-  CENSORED_REPO=`echo ${CHEF_REPO} | sed -e "s|${GITHUB_PASSWORD}|\*\*\*|"`
+  CENSORED_REPO=$CHEF_REPO
+  if [ ! -z ${GITHUB_LOGIN} ]; then
+    if [ ! -z ${GITHUB_PASSWORD} ]; then
+      CHEF_REPO=`echo ${CHEF_REPO} | sed -e "s|https://${GITHUB_LOGIN}@|https://${GITHUB_LOGIN}:${GITHUB_PASSWORD}@|"`
+      CENSORED_REPO=`echo ${CHEF_REPO} | sed -e "s|${GITHUB_PASSWORD}|\*\*\*|"`
+    fi
+  fi
   print_step "Cloning chef repo (${CENSORED_REPO})"
 
   git clone ${CHEF_REPO} /tmp/chef
@@ -222,7 +227,11 @@ if [ ! -d /tmp/chef ]; then
   fi
   print_step "Updating submodules..."
   if [ -e /tmp/chef/.gitmodules ]; then
-    sed -i -e "s/${GITHUB_LOGIN}@/${GITHUB_LOGIN}:${GITHUB_PASSWORD}@/g" /tmp/chef/.gitmodules
+    if [ ! -z ${GITHUB_LOGIN} ]; then
+      if [ ! -z ${GITHUB_PASSWORD} ]; then
+        sed -i -e "s/${GITHUB_LOGIN}@/${GITHUB_LOGIN}:${GITHUB_PASSWORD}@/g" /tmp/chef/.gitmodules
+      fi
+    fi
   fi
   cd /tmp/chef && git submodule update --init
   if [ ! $? -eq 0 ]; then
