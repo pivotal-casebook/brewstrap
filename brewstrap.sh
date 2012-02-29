@@ -242,6 +242,8 @@ else
   fi
 fi
 
+unset GIT_ASKPASS
+
 if [ ! -e /tmp/chef/node.json ]; then
   print_error "The chef repo provided has no node.json at the toplevel. This is required to know what to run."
 fi
@@ -261,7 +263,6 @@ else
 fi
 cd $ORIGINAL_PWD
 
-export GIT_ASKPASS=
 
 exec bash --login
 
